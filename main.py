@@ -30,8 +30,8 @@ while running:
         keys = pygame.key.get_pressed()
         # if key[pygame.K_DOWN]:
         #     hero.rect.top += dist
-        # if key[pygame.K_UP]:
-        #     hero.rect.top -= dist
+        # if keys[pygame.K_SPACE]:
+        #     hero.rect. += dist
         if keys[pygame.K_RIGHT]:
             hero.rect.left += dist
         if keys[pygame.K_LEFT]:
@@ -40,7 +40,6 @@ while running:
     screen.fill([255, 255, 255])
     screen.blit(BackGround.image, BackGround.rect)
     all_sprites.draw(screen)
-
     pygame.display.update()
     pygame.display.flip()
 pygame.quit()
