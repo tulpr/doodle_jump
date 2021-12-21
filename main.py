@@ -3,7 +3,7 @@ from load_image import load_image
 from Background import Background
 
 pygame.init()
-size = width, height = 500, 500
+size = width, height = 500, 600
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption('Doodle jump')
 
@@ -18,7 +18,7 @@ hero = pygame.sprite.Sprite(all_sprites)
 # создадим спрайт
 # sprite = pygame.sprite.Sprite()
 hero.image = hero_img
-hero.rect = hero.image.get_rect().move((width - 130) // 2, 300)
+hero.rect = hero.image.get_rect().move((width - 130) // 2, (height - 100) * 0.8)
 dist = 10
 
 running = True
