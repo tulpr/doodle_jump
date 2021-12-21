@@ -18,7 +18,7 @@ hero = pygame.sprite.Sprite(all_sprites)
 # создадим спрайт
 # sprite = pygame.sprite.Sprite()
 hero.image = hero_img
-hero.rect = hero.image.get_rect()
+hero.rect = hero.image.get_rect().move((width - 130) // 2, 300)
 dist = 10
 
 running = True
