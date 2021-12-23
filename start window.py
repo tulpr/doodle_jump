@@ -26,6 +26,10 @@ def start_screen():
                     rules_screen()
                 elif event.key == pygame.K_x:
                     terminate()
+                elif event.key == pygame.K_m:
+                    shop_screen()
+                elif event.key == pygame.K_a:
+                    play_screen()
         pygame.display.flip()
 
 
@@ -41,6 +45,24 @@ def rules_screen():
                 if event.key == pygame.K_c:
                     start_screen()
         pygame.display.flip()
+
+
+def shop_screen():
+    image = pygame.image.load('data\\shop.jpg')
+    fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
+    screen.blit(fon, (0, 0))
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_c:
+                    start_screen()
+        pygame.display.flip()
+
+
+def play_screen():
+    pass
 
 
 start_screen()
