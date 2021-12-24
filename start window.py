@@ -1,5 +1,7 @@
 import pygame
 import sys
+from load_image import load_image
+from Background import Background
 
 
 pygame.init()
@@ -62,7 +64,40 @@ def shop_screen():
 
 
 def play_screen():
-    pass
+    image = pygame.image.load('data\\play.jpg')
+    fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
+    screen.blit(fon, (0, 0))
+
+    # создадим группу, содержащую все спрайты
+    all_sprites = pygame.sprite.Group()
+    hero_img = load_image('slime.png')
+    hero_img = pygame.transform.scale(hero_img, (130, 100))
+    hero = pygame.sprite.Sprite(all_sprites)
+    # создадим спрайт
+    # sprite = pygame.sprite.Sprite()
+    hero.image = hero_img
+    hero.rect = hero.image.get_rect().move((WIDTH - 130) // 2, (HEIGHT - 100) * 0.8)
+    dist = 10
+
+    running = True
+    jump_flag = False
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            keys = pygame.key.get_pressed()
+            # if key[pygame.K_DOWN]:
+            #     hero.rect.top += dist
+            if keys[pygame.K_SPACE]:
+                pass
+            if keys[pygame.K_RIGHT]:
+                hero.rect.left += dist
+            if keys[pygame.K_LEFT]:
+                hero.rect.left -= dist
+        screen.blit(fon, (0, 0))
+        all_sprites.draw(screen)
+        pygame.display.update()
+        pygame.display.flip()
 
 
 start_screen()
