@@ -2,7 +2,7 @@ import pygame
 import sys
 from load_image import load_image
 from Background import Background
-
+from math import cos, pi
 
 pygame.init()
 size = WIDTH, HEIGHT = 500, 600
@@ -81,7 +81,13 @@ def play_screen():
 
     running = True
     jump_flag = False
+    time = 0
+    freq = 0.001
+    mag = 50
     while running:
+        time += 1
+        h_t = 350
+        hero.rect.top = h_t + mag * cos(2*pi*freq*time)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
