@@ -5,8 +5,10 @@ import pygame
 
 from load_image import load_image
 
+pygame.font.init()
 pygame.init()
 size = WIDTH, HEIGHT = 500, 600
+myfont = pygame.font.SysFont('Comic Sans MS', 30)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption('Doodle jump')
 
@@ -65,9 +67,6 @@ def shop_screen():
 
 
 def play_screen():
-    # image = pygame.image.load('data\\play.jpg')
-    # fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
-    # screen.blit(fon, (0, 0))
     def draw_hero(x, y, screen, name='slime'):
         # # создадим группу, содержащую все спрайты
         all_sprites = pygame.sprite.Group()
@@ -77,59 +76,24 @@ def play_screen():
         if name == 'mora':
             hero_img = pygame.transform.scale(hero_img, (30, 30))
         hero = pygame.sprite.Sprite(all_sprites)
-        # создадим спрайт
-        # sprite = pygame.sprite.Sprite()
+
         hero.image = hero_img
         hero.rect = hero.image.get_rect().move(x + (WIDTH - 130) // 2, y + (HEIGHT - 100) * 0.8)
         all_sprites.draw(screen)
         return hero
 
-    # dist = 10
-    #
-    # running = True
-    # jump_flag = False
-    # time = 0
-    # freq = 0.001
-    # mag = 80
-    # while running:
-    #     time += 1
-    #     h_t = 350
-    #     hero.rect.top = h_t + mag * cos(2 * pi * freq * time)
-    #     for event in pygame.event.get():
-    #         if event.type == pygame.QUIT:
-    #             running = False
-    #
-    #
-    #         keys = pygame.key.get_pressed()
-    #         # if key[pygame.K_DOWN]:
-    #         #     hero.rect.top += dist
-    #         if keys[pygame.K_SPACE]:
-    #             pass
-    #         if keys[pygame.K_RIGHT]:
-    #             hero.rect.left += dist
-    #         if keys[pygame.K_LEFT]:
-    #             hero.rect.left -= dist
-    #     screen.blit(fon, (0, 0))
-    #     all_sprites.draw(screen)
-    #     pygame.display.update()
-    #     pygame.display.flip()
     image = pygame.image.load('data\\play.jpg')
     fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
     FPS = 60
-    W = 700  # ширина экрана
-    H = 300  # высота экрана
-    WHITE = (255, 255, 255)
-    BLUE = (0, 70, 225)
 
-    # sc = pygame.display.set_mode((W, H))
     clock = pygame.time.Clock()
+    count_mora = 0
     t = 0
-    a = 300
+    a = 600
     y0 = 0
     v0 = 400
     x = 0
-    y = 0
     v = v0
     n_plat = 3
     y_pr = y0
@@ -154,15 +118,21 @@ def play_screen():
         # pygame.draw.circle(screen, BLUE, (x, y), r)
         hero = draw_hero(x, y, screen)
         for indx, pl in enumerate(platforms):
+            mora_col = 0
             platform = draw_hero(pl[0], pl[1], screen, name='platform')
             if moras[indx]:
                 mora = draw_hero(pl[0] + 60, pl[1] - 40, screen, name='mora')
+                mora_col = pygame.sprite.collide_rect(hero, mora)
             col = pygame.sprite.collide_rect(hero, platform)
-
             if col:
                 y0 = y
                 t = 0
                 v = v0
+            if mora_col:
+                count_mora += 10
+                moras[indx] = 0
+        # отрисовка текста
+        textsurface = myfont.render(f'Мора: {count_mora}', False, (0, 0, 0))
         # сдвигаем платформы вниз
         for indx, _ in enumerate(platforms):
             platforms[indx][1] += 1
@@ -175,6 +145,7 @@ def play_screen():
             image = pygame.image.load('data\\end.jpg')
             fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
             screen.blit(fon, (0, 0))
+        screen.blit(textsurface, (200, 0))
         pygame.display.update()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
