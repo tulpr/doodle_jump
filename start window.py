@@ -1,3 +1,4 @@
+import random
 import sys
 
 import pygame
@@ -71,7 +72,8 @@ def play_screen():
         # # создадим группу, содержащую все спрайты
         all_sprites = pygame.sprite.Group()
         hero_img = load_image(name + '.png')
-        hero_img = pygame.transform.scale(hero_img, (130, 100))
+        if name=='slime':
+            hero_img = pygame.transform.scale(hero_img, (130, 100))
         hero = pygame.sprite.Sprite(all_sprites)
         # создадим спрайт
         # sprite = pygame.sprite.Sprite()
@@ -127,27 +129,45 @@ def play_screen():
     x = 0
     y = 0
     v = v0
+    n_plat = 3
     y_pr = y0
+    platforms = [[0, 130], [-100, -50]]
+
     while 1:
+        col = []
         t += 1 / FPS
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
                 sys.exit()
-
+        # сгенерируем список платформ длины n_plat
+        if len(platforms) <= n_plat:
+            platforms.append([random.randrange(-WIDTH // 2, WIDTH // 2, 40),
+                              random.randrange(-int(1.1 * HEIGHT) // 2, -HEIGHT // 2, 60)])
         y = y0 - v * t + (a * t ** 2) / 2
         cc = (y - y_pr) * FPS
         y_pr = y
         screen.blit(fon, (0, 0))
         # pygame.draw.circle(screen, BLUE, (x, y), r)
         hero = draw_hero(x, y, screen)
-        platform = draw_hero(0, 130, screen, name='platform')
-        col = pygame.sprite.collide_rect(hero, platform)
-        print(col)
-        if col:
-            y0 = y
-            t = 0
-            v = v0
+        for pl in platforms:
+            platform = draw_hero(pl[0], pl[1], screen, name='platform')
+            col = pygame.sprite.collide_rect(hero, platform)
 
+            if col:
+                y0 = y
+                t = 0
+                v = v0
+        # сдвигаем платформы вниз
+        for indx, _ in enumerate(platforms):
+            platforms[indx][1] += 1
+        # удаление платформ вышедшие за край экрана
+        for indx, _ in enumerate(platforms):
+            if platforms[indx][1] > 100:
+                del platforms[indx]
+        if y > 100:
+            image = pygame.image.load('data\\end.jpg')
+            fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
+            screen.blit(fon, (0, 0))
         pygame.display.update()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
