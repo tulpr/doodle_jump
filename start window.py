@@ -72,8 +72,10 @@ def play_screen():
         # # создадим группу, содержащую все спрайты
         all_sprites = pygame.sprite.Group()
         hero_img = load_image(name + '.png')
-        if name=='slime':
+        if name == 'slime':
             hero_img = pygame.transform.scale(hero_img, (130, 100))
+        if name == 'mora':
+            hero_img = pygame.transform.scale(hero_img, (30, 30))
         hero = pygame.sprite.Sprite(all_sprites)
         # создадим спрайт
         # sprite = pygame.sprite.Sprite()
@@ -132,6 +134,7 @@ def play_screen():
     n_plat = 3
     y_pr = y0
     platforms = [[0, 130], [-100, -50]]
+    moras = [0, 0]
 
     while 1:
         col = []
@@ -143,14 +146,17 @@ def play_screen():
         if len(platforms) <= n_plat:
             platforms.append([random.randrange(-WIDTH // 2, WIDTH // 2, 40),
                               random.randrange(-int(1.1 * HEIGHT) // 2, -HEIGHT // 2, 60)])
+            moras.append(random.randint(0, 1))
         y = y0 - v * t + (a * t ** 2) / 2
         cc = (y - y_pr) * FPS
         y_pr = y
         screen.blit(fon, (0, 0))
         # pygame.draw.circle(screen, BLUE, (x, y), r)
         hero = draw_hero(x, y, screen)
-        for pl in platforms:
+        for indx, pl in enumerate(platforms):
             platform = draw_hero(pl[0], pl[1], screen, name='platform')
+            if moras[indx]:
+                mora = draw_hero(pl[0] + 60, pl[1] - 40, screen, name='mora')
             col = pygame.sprite.collide_rect(hero, platform)
 
             if col:
@@ -164,6 +170,7 @@ def play_screen():
         for indx, _ in enumerate(platforms):
             if platforms[indx][1] > 100:
                 del platforms[indx]
+                del moras[indx]
         if y > 100:
             image = pygame.image.load('data\\end.jpg')
             fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
