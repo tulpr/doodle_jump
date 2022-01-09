@@ -1,7 +1,7 @@
 import os
 import sys
-
 import pygame
+import sqlite3
 
 pygame.init()
 
@@ -21,6 +21,15 @@ def load_image(name, colorkey=None):
     else:
         image = image.convert_alpha()
     return image
+
+
+def mora_in_db(count):
+    con = sqlite3.connect("jump.db")
+    cur = con.cursor()
+    cur.execute(f"UPDATE records SET last = {count}")
+    cur.execute(f"UPDATE records SET max = {count} WHERE max < {count}")
+    con.commit()
+    con.close()
 
 
 pygame.quit()

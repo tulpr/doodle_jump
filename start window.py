@@ -3,7 +3,7 @@ import sys
 
 import pygame
 
-from load_image import load_image
+from load_image import load_image, mora_in_db
 
 pygame.font.init()
 pygame.init()
@@ -19,9 +19,6 @@ def terminate():
 
 
 def start_screen():
-    image = pygame.image.load('data\\start.jpg')
-    fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
-    screen.blit(fon, (0, 0))
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -35,34 +32,37 @@ def start_screen():
                     shop_screen()
                 elif event.key == pygame.K_a:
                     play_screen()
+        image = pygame.image.load('data\\start.jpg')
+        fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
+        screen.blit(fon, (0, 0))
         pygame.display.flip()
 
 
 def rules_screen():
-    image = pygame.image.load('data\\rules.jpg')
-    fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
-    screen.blit(fon, (0, 0))
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_c:
-                    start_screen()
+                    return
+        image = pygame.image.load('data\\rules.jpg')
+        fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
+        screen.blit(fon, (0, 0))
         pygame.display.flip()
 
 
 def shop_screen():
-    image = pygame.image.load('data\\shop.jpg')
-    fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
-    screen.blit(fon, (0, 0))
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_c:
-                    start_screen()
+                    return
+        image = pygame.image.load('data\\shop.jpg')
+        fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
+        screen.blit(fon, (0, 0))
         pygame.display.flip()
 
 
@@ -104,6 +104,7 @@ def play_screen():
     while 1:
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
+                mora_in_db(count_mora)
                 sys.exit()
             elif i.type == pygame.KEYDOWN:
                 if i.key == pygame.K_p:
@@ -119,7 +120,7 @@ def play_screen():
                 platforms.append([random.randrange(-WIDTH // 2, WIDTH // 2, 40),
                                   random.randrange(-int(1.1 * HEIGHT) // 2, -HEIGHT // 2, 60)])
                 moras.append(random.randint(0, 1))
-            y = y0 - v * t + (a * t ** 2) / 2
+            y = y0 - v * t + (a * (t ** 2)) / 2
             cc = (y - y_pr) * FPS
             y_pr = y
             screen.blit(fon, (0, 0))
@@ -153,6 +154,16 @@ def play_screen():
                 image = pygame.image.load('data\\end.jpg')
                 fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
                 screen.blit(fon, (0, 0))
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        mora_in_db(count_mora)
+                        terminate()
+                    elif event.type == pygame.KEYDOWN:
+                        mora_in_db(count_mora)
+                        if event.key == pygame.K_n:
+                            return
+                        if event.key == pygame.K_x:
+                            terminate()
             screen.blit(textsurface, (200, 0))
             pygame.display.update()
             keys = pygame.key.get_pressed()
