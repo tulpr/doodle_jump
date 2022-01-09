@@ -3,7 +3,7 @@ import sys
 
 import pygame
 
-from load_image import load_image, mora_in_db
+from functions import load_image, mora_in_db, mora_from_db, get_slime_name, get_skin_id, get_skins_bool
 
 pygame.font.init()
 pygame.init()
@@ -32,9 +32,12 @@ def start_screen():
                     shop_screen()
                 elif event.key == pygame.K_a:
                     play_screen()
+        count_mora = mora_from_db()
+        mora_count = myfont.render(f'{count_mora}', False, (254, 246, 238))
         image = pygame.image.load('data\\start.jpg')
         fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
         screen.blit(fon, (0, 0))
+        screen.blit(mora_count, (200, 23))
         pygame.display.flip()
 
 
@@ -62,7 +65,29 @@ def shop_screen():
                     return
         image = pygame.image.load('data\\shop.jpg')
         fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
+        count_mora = mora_from_db()
+        mora_count = myfont.render(f'{count_mora}', False, (254, 246, 238))
+        btns = pygame.sprite.Group()
+        skins = get_skins_bool()
+        skin_id = get_skin_id()
+        for i in range(1, 1 + len(skins)):
+            if i == skin_id:
+                sprite = pygame.sprite.Sprite()
+                sprite.image = load_image(f"skin_on.png")
+                sprite.rect = sprite.image.get_rect()
+                sprite.rect.x = 340
+                sprite.rect.y = 66 + (93 * (i - 1))
+                btns.add(sprite)
+            elif skins[i - 1]:
+                sprite = pygame.sprite.Sprite()
+                sprite.image = load_image(f"{i}not.png")
+                sprite.rect = sprite.image.get_rect()
+                sprite.rect.x = 340
+                sprite.rect.y = 66 + (93 * (i - 1))
+                btns.add(sprite)
         screen.blit(fon, (0, 0))
+        screen.blit(mora_count, (57, 23))
+        btns.draw(screen)
         pygame.display.flip()
 
 
@@ -72,7 +97,17 @@ def play_screen():
         all_sprites = pygame.sprite.Group()
         hero_img = load_image(name + '.png')
         if name == 'slime':
-            hero_img = pygame.transform.scale(hero_img, (130, 100))
+            hero_img = pygame.transform.scale(hero_img, (119, 100))
+        if name == 'slime_dendro':
+            hero_img = pygame.transform.scale(hero_img, (141, 137))
+        if name == 'slime_electro':
+            hero_img = pygame.transform.scale(hero_img, (117, 109))
+        if name == 'slime_geo':
+            hero_img = pygame.transform.scale(hero_img, (126, 100))
+        if name == 'slime_pyro':
+            hero_img = pygame.transform.scale(hero_img, (118, 83))
+        if name == 'paimon':
+            hero_img = pygame.transform.scale(hero_img, (100, 160))
         if name == 'mora':
             hero_img = pygame.transform.scale(hero_img, (30, 30))
         hero = pygame.sprite.Sprite(all_sprites)
@@ -125,7 +160,7 @@ def play_screen():
             y_pr = y
             screen.blit(fon, (0, 0))
             # pygame.draw.circle(screen, BLUE, (x, y), r)
-            hero = draw_hero(x, y, screen)
+            hero = draw_hero(x, y, screen, get_slime_name())
             for indx, pl in enumerate(platforms):
                 mora_col = 0
                 platform = draw_hero(pl[0], pl[1], screen, name='platform')
@@ -141,7 +176,7 @@ def play_screen():
                     count_mora += 10
                     moras[indx] = 0
             # отрисовка текста
-            textsurface = myfont.render(f'Мора: {count_mora}', False, (0, 0, 0))
+            textsurface = myfont.render(f'Мора: {count_mora}', False, (254, 246, 238))
             # сдвигаем платформы вниз
             for indx, _ in enumerate(platforms):
                 platforms[indx][1] += 1
