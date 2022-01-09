@@ -3,7 +3,8 @@ import sys
 
 import pygame
 
-from functions import load_image, mora_in_db, mora_from_db, get_slime_name, get_skin_id, get_skins_bool
+from functions import load_image, mora_in_db, mora_from_db, get_slime_name, get_skin_id, get_skins_bool, new_skin,\
+    change_skin
 
 pygame.font.init()
 pygame.init()
@@ -57,12 +58,6 @@ def rules_screen():
 
 def shop_screen():
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                terminate()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_c:
-                    return
         image = pygame.image.load('data\\shop.jpg')
         fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
         count_mora = mora_from_db()
@@ -78,13 +73,74 @@ def shop_screen():
                 sprite.rect.x = 340
                 sprite.rect.y = 66 + (93 * (i - 1))
                 btns.add(sprite)
-            elif skins[i - 1]:
+            elif skins[i - 1][0] == 'False':
                 sprite = pygame.sprite.Sprite()
                 sprite.image = load_image(f"{i}not.png")
                 sprite.rect = sprite.image.get_rect()
                 sprite.rect.x = 340
                 sprite.rect.y = 66 + (93 * (i - 1))
                 btns.add(sprite)
+            else:
+                sprite = pygame.sprite.Sprite()
+                sprite.image = load_image(f"{i}have.png")
+                sprite.rect = sprite.image.get_rect()
+                sprite.rect.x = 340
+                sprite.rect.y = 66 + (93 * (i - 1))
+                btns.add(sprite)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_c:
+                    return
+                if event.key == pygame.K_1:
+                    if skin_id == 1:
+                        break
+                    elif skins[0][0] == 'False':
+                        mora_in_db(-200)
+                        new_skin(1)
+                    else:
+                        change_skin(1)
+                if event.key == pygame.K_2:
+                    if skin_id == 2:
+                        break
+                    elif skins[1][0] == 'False':
+                        mora_in_db(-200)
+                        new_skin(2)
+                    else:
+                        change_skin(2)
+                if event.key == pygame.K_3:
+                    if skin_id == 3:
+                        break
+                    elif skins[2][0] == 'False':
+                        mora_in_db(-200)
+                        new_skin(3)
+                    else:
+                        change_skin(3)
+                if event.key == pygame.K_4:
+                    if skin_id == 4:
+                        break
+                    elif skins[3][0] == 'False':
+                        mora_in_db(-200)
+                        new_skin(4)
+                    else:
+                        change_skin(4)
+                if event.key == pygame.K_5:
+                    if skin_id == 5:
+                        break
+                    elif skins[4][0] == 'False':
+                        mora_in_db(-200)
+                        new_skin(5)
+                    else:
+                        change_skin(5)
+                if event.key == pygame.K_6:
+                    if skin_id == 6:
+                        break
+                    elif skins[5][0] == 'False':
+                        mora_in_db(-1000)
+                        new_skin(6)
+                    else:
+                        change_skin(6)
         screen.blit(fon, (0, 0))
         screen.blit(mora_count, (57, 23))
         btns.draw(screen)
@@ -107,7 +163,7 @@ def play_screen():
         if name == 'slime_pyro':
             hero_img = pygame.transform.scale(hero_img, (118, 83))
         if name == 'paimon':
-            hero_img = pygame.transform.scale(hero_img, (100, 160))
+            hero_img = pygame.transform.scale(hero_img, (90, 140))
         if name == 'mora':
             hero_img = pygame.transform.scale(hero_img, (30, 30))
         hero = pygame.sprite.Sprite(all_sprites)

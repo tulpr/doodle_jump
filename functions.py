@@ -23,14 +23,6 @@ def load_image(name, colorkey=None):
     return image
 
 
-def mora_in_db(count):
-    con = sqlite3.connect("jump.db")
-    cur = con.cursor()
-    cur.execute(f"UPDATE mora SET count = count + {count}")
-    con.commit()
-    con.close()
-
-
 def mora_from_db():
     con = sqlite3.connect("jump.db")
     cur = con.cursor()
@@ -38,6 +30,16 @@ def mora_from_db():
     con.commit()
     con.close()
     return mora[0]
+
+
+def mora_in_db(count):
+    if count < 0 and mora_from_db() + count < 0:
+        return
+    con = sqlite3.connect("jump.db")
+    cur = con.cursor()
+    cur.execute(f"UPDATE mora SET count = count + {count}")
+    con.commit()
+    con.close()
 
 
 def get_slime_name():
@@ -61,10 +63,27 @@ def get_skin_id():
 def get_skins_bool():
     con = sqlite3.connect("jump.db")
     cur = con.cursor()
-    list1 = cur.execute("SELECT 'have or not' FROM slimes").fetchall()
+    list1 = cur.execute("SELECT have_or_not FROM slimes").fetchall()
     con.commit()
     con.close()
     return list1
+
+
+def new_skin(number):
+    con = sqlite3.connect("jump.db")
+    cur = con.cursor()
+    cur.execute(f"UPDATE slimes SET have_or_not = 'True' WHERE id = {number}")
+    con.commit()
+    con.close()
+
+
+def change_skin(number):
+    con = sqlite3.connect("jump.db")
+    cur = con.cursor()
+    cur.execute(f"UPDATE skin SET number = {number}")
+    cur.execute(f"UPDATE skin SET name = (SELECT name FROM slimes WHERE id = {number})")
+    con.commit()
+    con.close()
 
 
 pygame.quit()
