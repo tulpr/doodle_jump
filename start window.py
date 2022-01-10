@@ -153,17 +153,17 @@ def play_screen():
         all_sprites = pygame.sprite.Group()
         hero_img = load_image(name + '.png')
         if name == 'slime':
-            hero_img = pygame.transform.scale(hero_img, (119, 100))
+            hero_img = pygame.transform.scale(hero_img, (70, 60))
         if name == 'slime_dendro':
-            hero_img = pygame.transform.scale(hero_img, (141, 137))
+            hero_img = pygame.transform.scale(hero_img, (90, 80))
         if name == 'slime_electro':
-            hero_img = pygame.transform.scale(hero_img, (117, 109))
+            hero_img = pygame.transform.scale(hero_img, (80, 80))
         if name == 'slime_geo':
-            hero_img = pygame.transform.scale(hero_img, (126, 100))
+            hero_img = pygame.transform.scale(hero_img, (80, 70))
         if name == 'slime_pyro':
-            hero_img = pygame.transform.scale(hero_img, (118, 83))
+            hero_img = pygame.transform.scale(hero_img, (70, 60))
         if name == 'paimon':
-            hero_img = pygame.transform.scale(hero_img, (90, 140))
+            hero_img = pygame.transform.scale(hero_img, (70, 120))
         if name == 'mora':
             hero_img = pygame.transform.scale(hero_img, (30, 30))
         hero = pygame.sprite.Sprite(all_sprites)
@@ -181,7 +181,7 @@ def play_screen():
     clock = pygame.time.Clock()
     count_mora = 0
     t = 0
-    a = 600
+    a = 490
     y0 = 0
     v0 = 400
     x = 0
@@ -229,7 +229,7 @@ def play_screen():
                     t = 0
                     v = v0
                 if mora_col:
-                    count_mora += 10
+                    count_mora += 1000
                     moras[indx] = 0
             # отрисовка текста
             textsurface = myfont.render(f'Мора: {count_mora}', False, (254, 246, 238))
