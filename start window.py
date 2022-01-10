@@ -169,7 +169,7 @@ def play_screen():
         if name == 'mora':
             hero_img = pygame.transform.scale(hero_img, (30, 30))
         if name == 'monster':
-            hero_img = pygame.transform.scale(hero_img, (100, 100))
+            hero_img = pygame.transform.scale(hero_img, (130, 90))
         hero = pygame.sprite.Sprite(all_sprites)
 
         hero.image = hero_img
