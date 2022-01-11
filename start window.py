@@ -168,8 +168,8 @@ def play_screen():
             hero_img = pygame.transform.scale(hero_img, (70, 120))
         if name == 'mora':
             hero_img = pygame.transform.scale(hero_img, (30, 30))
-        if name == 'monster':
-            hero_img = pygame.transform.scale(hero_img, (130, 90))
+        if name == 'monster up':
+            hero_img = pygame.transform.scale(hero_img, (70, 40))
         hero = pygame.sprite.Sprite(all_sprites)
 
         hero.image = hero_img
@@ -241,7 +241,7 @@ def play_screen():
                 platforms.append([random.randrange(-WIDTH // 2, WIDTH // 2, 40),
                                   random.randrange(-int(1.1 * HEIGHT) // 2, -HEIGHT // 2, 60)])
                 moras.append(random.randint(0, 1))
-                monsters.append(0) if moras[-1] == 1 else monsters.append(random.randint(1, 1))
+                monsters.append(0) if moras[-1] == 1 else monsters.append(random.randint(0, 10))
             y = y0 - v * t + (a * (t ** 2)) / 2
             cc = (y - y_pr) * FPS
             y_pr = y
@@ -263,8 +263,8 @@ def play_screen():
                 if mora_col:
                     count_mora += 10
                     moras[indx] = 0
-                if monsters[indx]:
-                    monster = draw_hero(pl[0] + 60, pl[1] - 40, screen, name='monster')
+                if monsters[indx] > 6:
+                    monster = draw_hero(pl[0] + 60, pl[1] - 40, screen, name='monster up')
                     monster_col = pygame.sprite.collide_rect(hero, monster)
 
                 if monster_col and fl <= 0:
@@ -280,7 +280,7 @@ def play_screen():
             platforms[indx][1] += 1
         # удаление платформ вышедшие за край экрана
         for indx, _ in enumerate(platforms):
-            if platforms[indx][1] > 100:
+            if platforms[indx][1] > 200:
                 del platforms[indx]
                 del moras[indx]
                 del monsters[indx]
