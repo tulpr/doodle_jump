@@ -1,5 +1,5 @@
-from const import *
-from terminate import *
+from helpers.const import *
+from helpers.terminate import *
 
 
 def rules_screen():
@@ -10,7 +10,7 @@ def rules_screen():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_c:
                     return
-        image = pygame.image.load('data\\rules.jpg')
+        image = pygame.image.load('data\\screens_foto\\rules.jpg')
         fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
         screen.blit(fon, (0, 0))
         pygame.display.flip()

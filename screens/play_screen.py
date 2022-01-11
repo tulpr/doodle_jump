@@ -1,8 +1,11 @@
 import random
 
-from const import *
-from terminate import *
-from functions import *
+from helpers.const import *
+from helpers.terminate import *
+from helpers.functions import *
+import os
+
+PTH = os.getcwd()
 
 
 def play_screen():
@@ -10,17 +13,17 @@ def play_screen():
         # # создадим группу, содержащую все спрайты
         all_sprites = pygame.sprite.Group()
         hero_img = load_image(name + '.png')
-        if name == 'slime':
+        if name == 'slimes\\slime':
             hero_img = pygame.transform.scale(hero_img, (70, 60))
-        if name == 'slime_dendro':
+        if name == 'slimes\\slime_dendro':
             hero_img = pygame.transform.scale(hero_img, (90, 80))
-        if name == 'slime_electro':
+        if name == 'slimes\\slime_electro':
             hero_img = pygame.transform.scale(hero_img, (80, 80))
-        if name == 'slime_geo':
+        if name == 'slimes\\slime_geo':
             hero_img = pygame.transform.scale(hero_img, (80, 70))
-        if name == 'slime_pyro':
+        if name == 'slimes\\slime_pyro':
             hero_img = pygame.transform.scale(hero_img, (70, 60))
-        if name == 'paimon':
+        if name == 'slimes\\paimon':
             hero_img = pygame.transform.scale(hero_img, (70, 120))
         if name == 'mora':
             hero_img = pygame.transform.scale(hero_img, (30, 30))
@@ -33,7 +36,7 @@ def play_screen():
         all_sprites.draw(screen)
         return hero
 
-    image = pygame.image.load('data\\play.jpg')
+    image = pygame.image.load('data\\screens_foto\\play.jpg')
     fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
     FPS = 60
@@ -141,7 +144,7 @@ def play_screen():
                 del moras[indx]
                 del monsters[indx]
         if y > 100:
-            image = pygame.image.load('data\\end.jpg')
+            image = pygame.image.load('data\\screens_foto\\end.jpg')
             fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
             screen.blit(fon, (0, 0))
             for event in pygame.event.get():

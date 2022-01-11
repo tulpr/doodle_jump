@@ -1,6 +1,9 @@
-from shop_screen import shop_screen
-from rules_screen import *
-from play_screen import *
+from screens.shop_screen import *
+from screens.rules_screen import *
+from screens.play_screen import *
+import os
+
+PTH = os.getcwd()
 
 
 def start_screen():
@@ -19,7 +22,7 @@ def start_screen():
                     play_screen()
         count_mora = mora_from_db()
         mora_count = myfont.render(f'{count_mora}', False, (254, 246, 238))
-        image = pygame.image.load('data\\start.jpg')
+        image = pygame.image.load('data\\screens_foto\\start.jpg')
         fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
         screen.blit(fon, (0, 0))
         screen.blit(mora_count, (200, 23))
