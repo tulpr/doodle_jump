@@ -3,6 +3,7 @@ import random
 from helpers.const import *
 from helpers.terminate import *
 from helpers.functions import *
+from screens.end_screen import *
 import os
 
 PTH = os.getcwd()
@@ -144,19 +145,8 @@ def play_screen():
                 del moras[indx]
                 del monsters[indx]
         if y > 100:
-            image = pygame.image.load('data\\screens_foto\\end.jpg')
-            fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
-            screen.blit(fon, (0, 0))
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    mora_in_db(count_mora)
-                    terminate()
-                elif event.type == pygame.KEYDOWN:
-                    mora_in_db(count_mora)
-                    if event.key == pygame.K_n:
-                        return
-                    if event.key == pygame.K_x:
-                        terminate()
+            end_screen(count_mora)
+            return
         screen.blit(textsurface, (200, 0))
         pygame.display.update()
         keys = pygame.key.get_pressed()

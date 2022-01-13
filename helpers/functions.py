@@ -1,4 +1,3 @@
-import os
 import sys
 import pygame
 import sqlite3
@@ -91,15 +90,15 @@ def change_skin(number):
     con.close()
 
 
-def do_it_clean():
-    con = sqlite3.connect("jump.db")
-    cur = con.cursor()
-    cur.execute(f"UPDATE mora SET count = 0")
-    cur.execute(f"UPDATE skin SET name = (SELECT name FROM slimes WHERE id = 1)")
-    cur.execute(f"UPDATE skin SET number = 1")
-    cur.execute(f"UPDATE slimes SET have_or_not = 'False' WHERE id > 1")
-    con.commit()
-    con.close()
+# def do_it_clean():
+#     con = sqlite3.connect(f"C:\\Users\\User\\PycharmProjects\\doodle_jump\\jump.db")
+#     cur = con.cursor()
+#     cur.execute(f"UPDATE mora SET count = 0")
+#     cur.execute(f"UPDATE skin SET name = (SELECT name FROM slimes WHERE id = 1)")
+#     cur.execute(f"UPDATE skin SET number = 1")
+#     cur.execute(f"UPDATE slimes SET have_or_not = 'False' WHERE id > 1")
+#     con.commit()
+#     con.close()
 
 
 pygame.quit()
