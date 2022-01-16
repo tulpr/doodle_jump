@@ -1,10 +1,4 @@
-import random
-
-from helpers.const import *
-from helpers.terminate import *
-from helpers.functions import *
 from screens.end_screen import *
-import os
 
 PTH = os.getcwd()
 
@@ -53,12 +47,18 @@ def play_screen():
     n_plat = 3
     y_pr = y0
     platforms = [[0, 130], [-100, -50]]
+    moving_platforms = [0, 0]
     moras = [0, 0]
     monsters = [0, 0]
     pause = 0
     mus_pause = 0
     volume = 0.5
     fl = 0
+    t_global = 0
+    y_screen_shift = 0
+    x_screen_shift = 0
+    difficulty = 0
+    difficulty_increment = 8
     while 1:
         fl -= 1
         for i in pygame.event.get():
@@ -76,44 +76,51 @@ def play_screen():
                         mus_pause = 0
                     else:
                         mus_pause = 1
-                    # pygame.mixer.music.stop()
                 elif i.key == pygame.K_o:
                     pygame.mixer.music.unpause()
-                    # pygame.mixer.music.play()
                     volume += 0.1
                 elif i.key == pygame.K_j:
                     pygame.mixer.music.unpause()
                     volume -= 0.1
-                    # pygame.mixer.music.play()
         pygame.mixer.music.set_volume(volume)
-        # print(pygame.mixer.music.get_volume())
-        # print(volume)
         pygame.time.delay(20)
         if mus_pause:
             pygame.mixer.music.pause()
         else:
             pygame.mixer.music.unpause()
         if pause == 0:
-            col = []
             t += 1 / FPS
+            t_global += 1 / FPS
+            if (t_global % difficulty_increment) < 1 / FPS:
+                difficulty += 1
             # сгенерируем список платформ длины n_plat
             if len(platforms) <= n_plat:
                 platforms.append([random.randrange(-WIDTH // 2, WIDTH // 2, 40),
                                   random.randrange(-int(1.1 * HEIGHT) // 2, -HEIGHT // 2, 60)])
                 moras.append(random.randint(0, 1))
-                monsters.append(0) if moras[-1] == 1 else monsters.append(random.randint(0, 10))
+                if moras[-1] == 1:
+                    monsters.append(0)
+                else:
+                    monsters.append(random.randint(0, 10))
+                moving_platforms.append(random.randint(0, 10))
             y = y0 - v * t + (a * (t ** 2)) / 2
             cc = (y - y_pr) * FPS
             y_pr = y
+            # Проверка границы экрана
+            if y < -400:
+                y_screen_shift = -y - 400
+            if x < -WIDTH // 3:
+                x_screen_shift = -(x + WIDTH // 3)
+            elif x > WIDTH // 3:
+                x_screen_shift = -(x - WIDTH // 3)
             screen.blit(fon, (0, 0))
-            # pygame.draw.circle(screen, BLUE, (x, y), r)
-            hero = draw_hero(x, y, screen, get_slime_name())
+            hero = draw_hero(x + x_screen_shift, y + y_screen_shift, screen, get_slime_name())
             for indx, pl in enumerate(platforms):
                 mora_col = 0
                 monster_col = 0
-                platform = draw_hero(pl[0], pl[1], screen, name='platform')
+                platform = draw_hero(pl[0] + x_screen_shift, pl[1] + y_screen_shift, screen, name='platform')
                 if moras[indx]:
-                    mora = draw_hero(pl[0] + 60, pl[1] - 40, screen, name='mora')
+                    mora = draw_hero(pl[0] + 60 + x_screen_shift, pl[1] - 40 + y_screen_shift, screen, name='mora')
                     mora_col = pygame.sprite.collide_rect(hero, mora)
                 col = pygame.sprite.collide_rect(hero, platform)
                 if col:
@@ -124,7 +131,8 @@ def play_screen():
                     count_mora += 10
                     moras[indx] = 0
                 if monsters[indx] > 6:
-                    monster = draw_hero(pl[0] + 60, pl[1] - 40, screen, name='monster up')
+                    monster = draw_hero(pl[0] + 60 + x_screen_shift, pl[1] - 40 + y_screen_shift, screen,
+                                        name='monster up')
                     monster_col = pygame.sprite.collide_rect(hero, monster)
 
                 if monster_col and fl <= 0:
@@ -135,19 +143,26 @@ def play_screen():
                     fl = 100
             # отрисовка текста
         textsurface = myfont.render(f'Мора: {count_mora}', False, (254, 246, 238))
+        textsurface_lvl = myfont.render(f'Сложность: {difficulty}', False, (254, 246, 238))
         # сдвигаем платформы вниз
         for indx, _ in enumerate(platforms):
-            platforms[indx][1] += 1
+            platforms[indx][1] += 1 + difficulty * 0.5
+            if moving_platforms[indx] > 5:
+                platforms[indx][0] += 3 * math.cos(t_global)
+
         # удаление платформ вышедшие за край экрана
         for indx, _ in enumerate(platforms):
             if platforms[indx][1] > 200:
                 del platforms[indx]
                 del moras[indx]
                 del monsters[indx]
+                del moving_platforms[indx]
+
         if y > 100:
             end_screen(count_mora)
             return
         screen.blit(textsurface, (200, 0))
+        screen.blit(textsurface_lvl, (200, 50))
         pygame.display.update()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:

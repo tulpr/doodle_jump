@@ -1,5 +1,7 @@
 import pygame
-
+import math
+import random
+import os
 pygame.font.init()
 pygame.init()
 pygame.mixer.music.load('data\\music\\Genshin music.mp3')
