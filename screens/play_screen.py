@@ -1,13 +1,15 @@
 from screens.end_screen import *
-
+import random
+import math
 PTH = os.getcwd()
 
 
 def play_screen():
-    def draw_hero(x, y, screen, name='slime'):
+    def draw_hero(x, y, screen, name='slime', time=None):
         # # создадим группу, содержащую все спрайты
         all_sprites = pygame.sprite.Group()
-        hero_img = load_image(name + '.png')
+        if name != 'monster':
+            hero_img = load_image(name + '.png')
         if name == 'slimes\\slime':
             hero_img = pygame.transform.scale(hero_img, (70, 60))
         if name == 'slimes\\slime_dendro':
@@ -22,7 +24,11 @@ def play_screen():
             hero_img = pygame.transform.scale(hero_img, (70, 120))
         if name == 'mora':
             hero_img = pygame.transform.scale(hero_img, (30, 30))
-        if name == 'monster up':
+        if name == 'monster':
+            if int(time * 10) % 2 == 0:
+                hero_img = load_image('monster up.png')
+            else:
+                hero_img = load_image('monster down.png')
             hero_img = pygame.transform.scale(hero_img, (70, 40))
         hero = pygame.sprite.Sprite(all_sprites)
 
@@ -58,6 +64,7 @@ def play_screen():
     y_screen_shift = 0
     x_screen_shift = 0
     difficulty = 0
+    record = 0
     difficulty_increment = 8
     while 1:
         fl -= 1
@@ -132,7 +139,7 @@ def play_screen():
                     moras[indx] = 0
                 if monsters[indx] > 6:
                     monster = draw_hero(pl[0] + 60 + x_screen_shift, pl[1] - 40 + y_screen_shift, screen,
-                                        name='monster up')
+                                        name='monster', time=t_global)
                     monster_col = pygame.sprite.collide_rect(hero, monster)
 
                 if monster_col and fl <= 0:
@@ -144,11 +151,16 @@ def play_screen():
             # отрисовка текста
         textsurface = myfont.render(f'Мора: {count_mora}', False, (254, 246, 238))
         textsurface_lvl = myfont.render(f'Сложность: {difficulty}', False, (254, 246, 238))
+        textsurface_record = myfont.render(f'Рекорд высоты: {round(record / HEIGHT, 2)}', False, (254, 246, 238))
+
         # сдвигаем платформы вниз
         for indx, _ in enumerate(platforms):
             platforms[indx][1] += 1 + difficulty * 0.5
-            if moving_platforms[indx] > 5:
+            record += 1 + difficulty * 0.5
+            if moving_platforms[indx] > 4 and moving_platforms[indx] < 7:
                 platforms[indx][0] += 3 * math.cos(t_global)
+            if moving_platforms[indx] > 6:
+                platforms[indx][1] += 3 * math.cos(t_global)
 
         # удаление платформ вышедшие за край экрана
         for indx, _ in enumerate(platforms):
@@ -161,8 +173,10 @@ def play_screen():
         if y > 100:
             end_screen(count_mora)
             return
-        screen.blit(textsurface, (200, 0))
-        screen.blit(textsurface_lvl, (200, 50))
+        hero = draw_hero(x + x_screen_shift, y + y_screen_shift, screen, get_slime_name())
+        screen.blit(textsurface, (412, 0))
+        screen.blit(textsurface_lvl, (360, 30))
+        screen.blit(textsurface_record, (200, 50))
         pygame.display.update()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
