@@ -7,14 +7,11 @@ def record_screen():
     while True:
         image = pygame.image.load('data\\screens_foto\\record.jpg')
         fon = pygame.transform.scale(image, (WIDTH, HEIGHT))
-        i = True
-        if i:
-            rec_dif = get_records()[0]
-            last_rec = myfont.render(f'Предыдущая высота: {round(rec_dif[1] / HEIGHT, 2)}', False, (254, 246, 238))
-            last_dif = myfont.render(f'Предыдущая сложность: {rec_dif[3]}', False, (254, 246, 238))
-            max_rec = myfont.render(f'Рекордная высота: {round(rec_dif[2] / HEIGHT, 2)}', False, (254, 246, 238))
-            max_dif = myfont.render(f'Рекордная сложность: {rec_dif[4]}', False, (254, 246, 238))
-            i = False
+        rec_dif = get_records()[0]
+        last_rec = myfont.render(f'Предыдущая высота: {round(rec_dif[1] / HEIGHT, 2)}', False, (254, 246, 238))
+        last_dif = myfont.render(f'Предыдущая сложность: {rec_dif[3]}', False, (254, 246, 238))
+        max_rec = myfont.render(f'Рекордная высота: {round(rec_dif[2] / HEIGHT, 2)}', False, (254, 246, 238))
+        max_dif = myfont.render(f'Рекордная сложность: {rec_dif[4]}', False, (254, 246, 238))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
