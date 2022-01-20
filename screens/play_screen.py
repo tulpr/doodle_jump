@@ -70,7 +70,7 @@ def play_screen():
         fl -= 1
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
-                mora_in_db(count_mora)
+                end_in_db(count_mora, record, difficulty)
                 sys.exit()
             elif i.type == pygame.KEYDOWN:
                 if i.key == pygame.K_p:
@@ -171,7 +171,8 @@ def play_screen():
                 del moving_platforms[indx]
 
         if y > 100:
-            end_screen(count_mora)
+            print(count_mora, record, difficulty)
+            end_screen(count_mora, record, difficulty)
             return
         hero = draw_hero(x + x_screen_shift, y + y_screen_shift, screen, get_slime_name())
         screen.blit(textsurface, (412, 0))

@@ -1,6 +1,9 @@
+import pygame
+
 from screens.shop_screen import *
 from screens.rules_screen import *
 from screens.play_screen import *
+from screens.record_screen import *
 import os
 
 PTH = os.getcwd()
@@ -20,6 +23,8 @@ def start_screen():
                     shop_screen()
                 elif event.key == pygame.K_a:
                     play_screen()
+                elif event.key == pygame.K_r:
+                    record_screen()
         count_mora = mora_from_db()
         mora_count = myfont.render(f'{count_mora}', False, (254, 246, 238))
         image = pygame.image.load('data\\screens_foto\\start.jpg')

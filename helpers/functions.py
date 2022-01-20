@@ -36,12 +36,16 @@ def mora_from_db():
     return mora[0]
 
 
-def mora_in_db(count):
-    if count < 0 and mora_from_db() + count < 0:
+def end_in_db(count_mora, record, difficulty):
+    if count_mora < 0 and mora_from_db() + count_mora < 0:
         return
     con = sqlite3.connect("jump.db")
     cur = con.cursor()
-    cur.execute(f"UPDATE mora SET count = count + {count}")
+    cur.execute(f"UPDATE mora SET count = count + {count_mora}")
+    cur.execute(f"UPDATE records SET last_rec = {record}")
+    cur.execute(f"UPDATE records SET last_dif = {difficulty}")
+    cur.execute(f"UPDATE records SET max_rec = {record} WHERE max_rec < {record}")
+    cur.execute(f"UPDATE records SET max_dif = {difficulty} WHERE max_dif < {difficulty}")
     con.commit()
     con.close()
 
@@ -88,6 +92,25 @@ def change_skin(number):
     cur.execute(f"UPDATE skin SET name = (SELECT name FROM slimes WHERE id = {number})")
     con.commit()
     con.close()
+
+
+def mora_in_db(count_mora):
+    if count_mora < 0 and mora_from_db() + count_mora < 0:
+        return
+    con = sqlite3.connect("jump.db")
+    cur = con.cursor()
+    cur.execute(f"UPDATE mora SET count = count + {count_mora}")
+    con.commit()
+    con.close()
+
+
+def get_records():
+    con = sqlite3.connect("jump.db")
+    cur = con.cursor()
+    list1 = cur.execute("SELECT * FROM records").fetchall()
+    con.commit()
+    con.close()
+    return list1
 
 
 # def do_it_clean():
