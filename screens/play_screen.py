@@ -6,7 +6,7 @@ PTH = os.getcwd()
 
 def play_screen():
     def draw_hero(x, y, screen, name='slime', time=None):
-        # # создадим группу, содержащую все спрайты
+        # создадим группу, содержащую все спрайты
         all_sprites = pygame.sprite.Group()
         if name != 'monster':
             hero_img = load_image(name + '.png')
@@ -25,7 +25,7 @@ def play_screen():
         if name == 'mora':
             hero_img = pygame.transform.scale(hero_img, (30, 30))
         if name == 'monster':
-            if int(time * 10) % 2 == 0:
+            if int(time * 30) % 2 == 0:
                 hero_img = load_image('monster up.png')
             else:
                 hero_img = load_image('monster down.png')
@@ -51,7 +51,6 @@ def play_screen():
     x = 0
     v = v0
     n_plat = 3
-    y_pr = y0
     platforms = [[0, 130], [-100, -50]]
     moving_platforms = [0, 0]
     moras = [0, 0]
@@ -111,8 +110,6 @@ def play_screen():
                     monsters.append(random.randint(0, 10))
                 moving_platforms.append(random.randint(0, 10))
             y = y0 - v * t + (a * (t ** 2)) / 2
-            cc = (y - y_pr) * FPS
-            y_pr = y
             # Проверка границы экрана
             if y < -400:
                 y_screen_shift = -y - 400
@@ -175,9 +172,9 @@ def play_screen():
             end_screen(count_mora, record, difficulty)
             return
         hero = draw_hero(x + x_screen_shift, y + y_screen_shift, screen, get_slime_name())
-        screen.blit(textsurface, (412, 0))
+        screen.blit(textsurface, (411, 0))
         screen.blit(textsurface_lvl, (360, 30))
-        screen.blit(textsurface_record, (200, 50))
+        screen.blit(textsurface_record, (180, 0))
         pygame.display.update()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
