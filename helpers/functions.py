@@ -1,11 +1,10 @@
-import sys
-import pygame
-import sqlite3
-
 import os
+import sqlite3
+import sys
+
+import pygame
 
 PTH = os.getcwd()
-
 
 pygame.init()
 
@@ -113,18 +112,4 @@ def get_records():
     return list1
 
 
-# def do_it_clean():
-#     con = sqlite3.connect(f"C:\\Users\\User\\PycharmProjects\\doodle_jump\\jump.db")
-#     cur = con.cursor()
-#     cur.execute(f"UPDATE mora SET count = 0")
-#     cur.execute(f"UPDATE skin SET name = (SELECT name FROM slimes WHERE id = 1)")
-#     cur.execute(f"UPDATE skin SET number = 1")
-#     cur.execute(f"UPDATE slimes SET have_or_not = 'False' WHERE id > 1")
-#     con.commit()
-#     con.close()
-
-
 pygame.quit()
-
-
-# do_it_clean()
