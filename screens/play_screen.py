@@ -64,7 +64,7 @@ def play_screen():
     x_screen_shift = 0
     difficulty = 0
     record = 0
-    difficulty_increment = 8
+    difficulty_increment = 30
     while 1:
         fl -= 1
         for i in pygame.event.get():
