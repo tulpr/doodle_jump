@@ -55,7 +55,7 @@ def get_slime_name():
     name = cur.execute("SELECT name FROM skin").fetchone()
     con.commit()
     con.close()
-    return name[0]
+    return '\\'.join(name[0].split('\\\\'))
 
 
 def get_skin_id():

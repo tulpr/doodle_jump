@@ -1,6 +1,9 @@
+import pygame
+
 from screens.end_screen import *
 import random
 import math
+
 PTH = os.getcwd()
 
 
@@ -132,7 +135,7 @@ def play_screen():
                     t = 0
                     v = v0
                 if mora_col:
-                    count_mora += 10
+                    count_mora += 1000
                     moras[indx] = 0
                 if monsters[indx] > 6:
                     monster = draw_hero(pl[0] + 60 + x_screen_shift, pl[1] - 40 + y_screen_shift, screen,
